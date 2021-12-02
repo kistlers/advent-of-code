@@ -1,3 +1,5 @@
+use elf::SplitExtension;
+
 // Code for the problem https://adventofcode.com/2021/day/2
 const YEAR: u32 = 2021;
 const DAY: u32 = 2;
@@ -12,8 +14,7 @@ fn main() {
     let mut forward2 = 0;
 
     for input_line in &input_lines {
-        let (dir, val) = input_line.split_once(" ").unwrap();
-        let val = val.parse::<i32>().unwrap();
+        let (dir, val): (_, i32) = input_line.split_once_parse_value(" ").unwrap();
         match dir {
             "down" => {
                 depth1 += val;
