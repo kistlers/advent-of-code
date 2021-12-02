@@ -12,9 +12,8 @@ fn main() {
     let mut forward2 = 0;
 
     for input_line in &input_lines {
-        let pattern: Vec<_> = input_line.split(" ").collect();
-        let dir = pattern[0];
-        let val = pattern[1].parse::<i32>().unwrap();
+        let (dir, val) = input_line.split_once(" ").unwrap();
+        let val = val.parse::<i32>().unwrap();
         match dir {
             "down" => {
                 depth1 += val;
