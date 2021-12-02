@@ -6,32 +6,39 @@ const DAY: u32 = 2;
 
 fn main() {
     let input_lines: Vec<String> = elf::get_input(YEAR, DAY, "53616c7465645f5fc3caba04b37cfdc549d664f17097aa5457af16a74fbc99744bebc15d2bc22c9784c1224456ac0746");
-    let mut depth1 = 0;
-    let mut forward1 = 0;
 
-    let mut aim2 = 0;
-    let mut depth2 = 0;
-    let mut forward2 = 0;
-
-    for input_line in &input_lines {
+    let (depth, forward) = &input_lines.iter().fold((0, 0), |(depth, forward), input_line| {
         let (dir, val): (_, i32) = input_line.split_once_parse_value(" ").unwrap();
         match dir {
             "down" => {
-                depth1 += val;
-                aim2 += val;
+                (depth + val, forward)
             }
             "up" => {
-                depth1 -= val;
-                aim2 -= val;
+                (depth - val, forward)
             }
             "forward" => {
-                forward1 += val;
-                forward2 += val;
-                depth2 += aim2 * val;
+                (depth, forward + val)
             }
             _ => panic!()
         }
-    }
-    println!("Part1: {}", forward1 * depth1);
-    println!("Part2: {}", forward2 * depth2);
+    });
+    println!("Part1: {}", forward * depth);
+
+
+    let (depth, forward, _) = &input_lines.iter().fold((0, 0, 0), |(depth, forward, aim), input_line| {
+        let (dir, val): (_, i32) = input_line.split_once_parse_value(" ").unwrap();
+        match dir {
+            "down" => {
+                (depth, forward, aim + val)
+            }
+            "up" => {
+                (depth, forward, aim - val)
+            }
+            "forward" => {
+                (depth + aim * val, forward + val, aim)
+            }
+            _ => panic!()
+        }
+    });
+    println!("Part2: {}", forward * depth);
 }
