@@ -1,0 +1,16 @@
+{
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "run day5-2021",
+      "program": "${workspaceFolder}/target/debug/day5-2021",
+      "args": [],
+      "cwd": "${workspaceFolder}/2021/day05",
+      "sourceMap": {},
+      "sourceLanguages": [
+        "rust"
+      ]
+    }
+  ]
+}
