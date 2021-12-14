@@ -1,5 +1,4 @@
 use std::collections::{BTreeMap, HashMap};
-use std::iter::once;
 use elf::SplitExtension;
 
 // Code for the problem https://adventofcode.com/2021/day/14
@@ -8,38 +7,30 @@ const DAY: u32 = 14;
 
 fn main() {
     let input_lines: Vec<String> = elf::get_input(YEAR, DAY, "53616c7465645f5fc3caba04b37cfdc549d664f17097aa5457af16a74fbc99744bebc15d2bc22c9784c1224456ac0746");
-    let mut iter = input_lines.iter();
-    let mut sequence = input_lines[0].chars().collect::<Vec<_>>();
+    let first_char = input_lines[0].chars().take(1).collect::<Vec<char>>()[0];
+    let mut pairs_with_counts = HashMap::new();
+    input_lines[0]
+        .chars()
+        .collect::<Vec<_>>()
+        .windows(2)
+        .for_each(|pair| *pairs_with_counts.entry((pair[0], pair[1])).or_insert(0) += 1);
     // println!("{}", sequence);
-    iter.next();
-    let operations = input_lines[2..]
+    let operations = input_lines
         .iter()
+        .skip(2)
         .map(|line| line.split_once_parse_value::<char>(" -> ").unwrap())
         .map(|(from, to)| (from.chars().collect::<Vec<_>>(), to))
-        .map(|(mut from, to)| (from.clone(), intersplice_in_middle(&mut from, to)))
-        .collect::<HashMap<Vec<char>, Vec<char>>>();
-    // for (from, to) in &operations {
-    //     println!("{} to {}", from, to);
-    // }
+        .map(|(from, to)| ((from[0], from[1]), to))
+        .collect::<HashMap<(char, char), char>>();
+
     for step in 1..=40 {
-        // let mut new_sequence = sequence.clone();
-        let mapped_windows = sequence
-            .windows(2)
-            .map(|s| operations[s].clone())
-            .collect::<Vec<_>>();
-        let new_sequence = mapped_windows
-            .iter()
-            .map(|s| [s[0], s[1]])
-            .flatten()
-            .chain(once(*mapped_windows.last().unwrap().last().unwrap()))
-            .collect::<Vec<_>>();
-        // println!("before: {}", String::from_iter(&sequence));
-        // println!("after:  {}", String::from_iter(&new_sequence));
-        sequence = new_sequence;
+        pairs_with_counts = update_counts(&pairs_with_counts, &operations);
+
         if step == 10 || step == 40 {
-            let mut counts = BTreeMap::new();
-            for c in sequence.iter() {
-                *counts.entry(c).or_insert(0) += 1;
+            // only count the second char in the pair and the very first of the initial input
+            let mut counts = BTreeMap::from([(first_char, 1)]);
+            for ((_, p1), count) in pairs_with_counts.iter() {
+                *counts.entry(*p1).or_insert(0) += count;
             }
             let max = counts.iter().max_by_key(|&(_, count)| count).unwrap();
             let min = counts.iter().min_by_key(|&(_, count)| count).unwrap();
@@ -50,12 +41,18 @@ fn main() {
                 println!("Part2: {}", max.1 - min.1);
             }
         }
-        println!("step {}", step);
     }
-
 }
 
-fn intersplice_in_middle(into: &mut Vec<char>, c: char) -> Vec<char> {
-    into.insert(1, c);
-    into.to_owned()
+fn update_counts(old_counts: &HashMap<(char, char), i64>, operations: &HashMap<(char, char), char>) -> HashMap<(char, char), i64> {
+    let mut new_counts = HashMap::new();
+    old_counts.iter()
+        .map(|((p0, p1), count)| {
+            ((p0, operations.get(&(*p0, *p1)).unwrap(), p1), count)
+        })
+        .for_each(|((p0, to, p1), count)| {
+            *new_counts.entry((*p0, *to)).or_insert(0) += *count;
+            *new_counts.entry((*to, *p1)).or_insert(0) += *count;
+        });
+    new_counts
 }
