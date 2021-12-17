@@ -19,7 +19,9 @@ fn main() {
         .unwrap();
     println!("({},{}) ({},{})", x_min, x_max, y_min, y_max);
 
-    println!("Part1: {}", get_best_height(x_min, x_max, y_min, y_max));
+    let (best_height, num_velocities) = get_best_height(x_min, x_max, y_min, y_max);
+    println!("Part1: {}", best_height);
+    println!("Part2: {}", num_velocities);
 }
 
 struct Loc {
@@ -62,12 +64,13 @@ impl Loc {
     }
 }
 
-fn get_best_height(x_min: i32, x_max: i32, y_min: i32, y_max: i32) -> i32 {
+fn get_best_height(x_min: i32, x_max: i32, y_min: i32, y_max: i32) -> (i32, i32) {
     let mut best_height = 0;
+    let mut num_velocities = 0;
     for xv in 0..(x_max + 1) {
         // for xv in 7..8 {
         // println!("xv: {}", xv);
-        for yv in 0..5000 {
+        for yv in y_min..5000 {
             // for yv in 2..3 {
             // println!("yv: {}", xv);
             let new_height = get_height(Loc { x_min, x_max, y_min, y_max, x: 0, y: 0, xv, yv, highest: 0 });
@@ -76,9 +79,10 @@ fn get_best_height(x_min: i32, x_max: i32, y_min: i32, y_max: i32) -> i32 {
                 best_height,
                 new_height,
             );
+            if new_height >= 0 {num_velocities += 1};
         }
     }
-    best_height
+    (best_height, num_velocities)
 }
 
 
