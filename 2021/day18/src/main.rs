@@ -1,5 +1,6 @@
-use std::fmt::{Debug, Display, Formatter};
+use std::fmt::{Debug, Display, Error, Formatter};
 use std::ops::Add;
+use std::str::FromStr;
 use elf::measure;
 use nom::branch::alt;
 use nom::character::complete::char;
@@ -139,6 +140,14 @@ impl Add for Snailfish {
     }
 }
 
+impl FromStr for Snailfish {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(parse_snailfish(s).unwrap().1)
+    }
+}
+
 fn main() {
     let input_lines: Vec<String> = elf::get_input(YEAR, DAY, "53616c7465645f5fc3caba04b37cfdc549d664f17097aa5457af16a74fbc99744bebc15d2bc22c9784c1224456ac0746");
 
@@ -147,7 +156,7 @@ fn main() {
     measure!({
     let snailfishes = input_lines
         .iter()
-        .map(|l| parse_snailfish(l).unwrap().1)
+        .map(|l| l.parse::<Snailfish>().unwrap())
         .collect::<Vec<_>>();
 
     magnitude_sum = snailfishes
