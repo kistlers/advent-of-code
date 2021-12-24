@@ -227,6 +227,18 @@
       "sourceLanguages": [
         "rust"
       ]
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "run day24-2021",
+      "program": "${workspaceFolder}/target/debug/day24-2021",
+      "args": [],
+      "cwd": "${workspaceFolder}/2021/day24",
+      "sourceMap": {},
+      "sourceLanguages": [
+        "rust"
+      ]
     }
   ]
 }

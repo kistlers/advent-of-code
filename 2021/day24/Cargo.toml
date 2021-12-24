@@ -1,8 +1,8 @@
 [package]
-name = "day23-2021"
+name = "day24-2021"
 version = "0.1.0"
 authors = ["Severin Kistler <kistler@ubique.ch>"]
-description = "advent of code 2021 day23"
+description = "advent of code 2021 day24"
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -10,5 +10,3 @@ edition = "2018"
 [dependencies]
 elf = { path = "/Users/sk/.terminal-magic/zsh/advent-of-rust/elf"}
 itertools = "0.10.3"
-
-[features]
