@@ -10,5 +10,3 @@ edition = "2018"
 [dependencies]
 elf = { path = "/Users/sk/.terminal-magic/zsh/advent-of-rust/elf"}
 itertools = "0.10.3"
-
-[features]
