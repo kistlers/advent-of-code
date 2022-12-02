@@ -1,4 +1,4 @@
-use std::collections::BinaryHeap;
+use itertools::Itertools;
 
 // Code for the problem https://adventofcode.com/2022/day/01
 const YEAR: u32 = 2022;
@@ -15,8 +15,9 @@ fn main() {
                 .map(|cal| cal.parse::<i32>().unwrap())
                 .sum::<i32>()
         })
-        .collect::<BinaryHeap<_>>()
-        .into_vec()[0..3];
+        .sorted_by(|a, b| b.cmp(a))
+        .take(3)
+        .collect::<Vec<i32>>();
     println!("part1: {}", top_calories[0]);
     println!("part2: {}", top_calories.iter().sum::<i32>());
 }
