@@ -6,7 +6,7 @@ const YEAR: u32 = 2022;
 const DAY: u32 = 03;
 
 fn main() {
-    let input_lines: Vec<String> = elf::get_input(YEAR, DAY, "53616c7465645f5f235e9a21eb1ad1558a877268d5a6533d8a3c56c539f0886b51e27e5ccf230b8815cb5ca121c1f3173a16dd022c3803eefcd5e6fb5f077dae");
+    let input_lines: Vec<String> = elf::get_input(YEAR, DAY, "<>");
     let part1 = input_lines.iter()
         .map(|input_line| {
             let (left, right) = input_line.split_at(input_line.len() / 2);

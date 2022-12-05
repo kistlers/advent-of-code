@@ -7,7 +7,7 @@ const YEAR: u32 = 2022;
 const DAY: u32 = 04;
 
 fn main() {
-    let input_lines: Vec<String> = elf::get_input(YEAR, DAY, "53616c7465645f5f235e9a21eb1ad1558a877268d5a6533d8a3c56c539f0886b51e27e5ccf230b8815cb5ca121c1f3173a16dd022c3803eefcd5e6fb5f077dae");
+    let input_lines: Vec<String> = elf::get_input(YEAR, DAY, "<>");
     let range_pairs = input_lines.iter()
         .map(|input_line| input_line.parse::<RangePair>().unwrap())
         .collect::<Vec<RangePair>>();
