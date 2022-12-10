@@ -359,6 +359,30 @@
       "sourceLanguages": [
         "rust"
       ]
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "run day09-2022",
+      "program": "${workspaceFolder}/target/debug/day09-2022",
+      "args": [],
+      "cwd": "${workspaceFolder}/2022/day09",
+      "sourceMap": {},
+      "sourceLanguages": [
+        "rust"
+      ]
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "run day10-2022",
+      "program": "${workspaceFolder}/target/debug/day10-2022",
+      "args": [],
+      "cwd": "${workspaceFolder}/2022/day10",
+      "sourceMap": {},
+      "sourceLanguages": [
+        "rust"
+      ]
     }
   ]
 }
