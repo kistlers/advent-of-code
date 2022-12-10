@@ -1,0 +1,12 @@
+[package]
+name = "day09-2022"
+version = "0.1.0"
+authors = ["Severin Kistler <kistlerseverin@gmail.com>"]
+description = "advent of code 2022 day09"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+elf = { path = "/Users/sk/.terminal-magic/zsh/advent-of-rust/elf"}
+itertools = "0.10.5"
