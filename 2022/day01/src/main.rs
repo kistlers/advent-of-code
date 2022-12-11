@@ -11,7 +11,7 @@ fn main() {
         .split("  ")
         .map(|foods| {
             foods
-                .split(" ")
+                .split(' ')
                 .map(|cal| cal.parse::<i32>().unwrap())
                 .sum::<i32>()
         })
