@@ -395,6 +395,18 @@
       "sourceLanguages": [
         "rust"
       ]
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "run day12-2022",
+      "program": "${workspaceFolder}/target/debug/day12-2022",
+      "args": [],
+      "cwd": "${workspaceFolder}/2022/day12",
+      "sourceMap": {},
+      "sourceLanguages": [
+        "rust"
+      ]
     }
   ]
 }
