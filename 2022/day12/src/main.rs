@@ -25,16 +25,16 @@ fn main() {
         }
     }
 
-    println!("part1: {}", bfs(&grid, e, 'S', height, width));
-    println!("part2: {}", bfs(&grid, e, 'a', height, width));
+    println!("part1: {}", bfs(&grid, e, &['S'], height, width));
+    println!("part2: {}", bfs(&grid, e, &['a', 'S'], height, width));
 }
 
-fn bfs(grid: &[Vec<char>], e: (i32, i32, i32), target: char, height: usize, width: usize) -> usize {
+fn bfs(grid: &[Vec<char>], e: (i32, i32, i32), targets: &[char], height: usize, width: usize) -> usize {
     let mut distance = vec![vec![1_000_000; width]; height];
     let mut stack = VecDeque::from([e]);
     while !stack.is_empty() {
         let (i, j, steps) = stack.pop_front().unwrap();
-        if grid[i as usize][j as usize] == target {
+        if targets.contains(&grid[i as usize][j as usize]) {
             return steps as usize;
         }
         if distance[i as usize][j as usize] <= steps {
