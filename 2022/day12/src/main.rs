@@ -31,9 +31,9 @@ fn main() {
 
 fn bfs(grid: &[Vec<char>], e: (i32, i32, i32), targets: &[char], height: usize, width: usize) -> usize {
     let mut distance = vec![vec![1_000_000; width]; height];
-    let mut stack = VecDeque::from([e]);
-    while !stack.is_empty() {
-        let (i, j, steps) = stack.pop_front().unwrap();
+    let mut queue = VecDeque::from([e]);
+    while !queue.is_empty() {
+        let (i, j, steps) = queue.pop_front().unwrap();
         if targets.contains(&grid[i as usize][j as usize]) {
             return steps as usize;
         }
@@ -57,7 +57,7 @@ fn bfs(grid: &[Vec<char>], e: (i32, i32, i32), targets: &[char], height: usize, 
                 true
             })
             .collect_vec();
-        stack.extend(new_edges);
+        queue.extend(new_edges);
     }
     1_000_000
 }
