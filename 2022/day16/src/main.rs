@@ -65,7 +65,7 @@ impl<'a> Network<'a> {
             };
         }
 
-        if self.memo.contains_key(&(valve, open_valves, minutes_left, with_elephant)) {
+        if self.memo.contains_key(&(valve, open_valves.clone(), minutes_left, with_elephant)) {
             return self.memo[&(valve, open_valves, minutes_left, with_elephant)];
         }
 
