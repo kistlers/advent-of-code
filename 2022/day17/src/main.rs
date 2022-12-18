@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+use elf::measure;
 use itertools::Itertools;
 
 // Code for the problem https://adventofcode.com/2022/day/17
@@ -8,12 +10,13 @@ fn main() {
     let input_lines: Vec<String> = elf::get_input(YEAR, DAY, "<>");
     let instructions = input_lines[0].chars().collect_vec();
 
-    let mut chamber = Chamber::new(instructions);
-    let mut part1 = 0;
-    for _ in 0..2022 {
-        part1 = chamber.place_next_rock()
-    }
+    let (part1, part2) = measure!({
+        let part1 = Chamber::new(instructions.clone()).solve_for_steps(2022);
+        let part2 = Chamber::new(instructions).solve_for_steps(1_000_000_000_000);
+        (part1, part2)
+    });
     println!("part1: {}", part1);
+    println!("part2: {}", part2);
 }
 
 #[derive(Clone, Debug)]
@@ -23,16 +26,35 @@ struct Chamber {
     instr_ptr: usize,
     curr_height: usize,
     next_rock: Kind,
+    cache: HashMap<(usize, usize), (usize, usize)>,
 }
 
 impl Chamber {
-    fn place_next_rock(&mut self) -> usize {
+    fn solve_for_steps(&mut self, steps: usize) -> usize {
+        for step in 0..steps {
+            if let Some(final_height) = self.place_next_rock(step, steps) {
+                return final_height;
+            }
+        }
+        self.curr_height
+    }
+
+    fn place_next_rock(&mut self, curr_step: usize, steps: usize) -> Option<usize> {
         let kind = self.fetch_and_inc_next_kind();
         let mut x = 2;
         let mut y = self.curr_height + 3 + kind.get_added_y_top_left();
 
-        // println!("{:?} at ({},{}) begins falling", kind, x, y);
-        // self.print_with_current(&kind, x, y);
+        if let std::collections::hash_map::Entry::Vacant(entry)
+            = self.cache.entry((kind as usize, self.instr_ptr)) {
+            entry.insert((curr_step, self.curr_height));
+        } else {
+            let (cached_step, cached_height) = self.cache[&(kind as usize, self.instr_ptr)];
+            let repetition_length = curr_step - cached_step;
+            let steps_to_go = steps - curr_step;
+            if steps_to_go % repetition_length == 0 {
+                return Some(self.curr_height + steps_to_go / repetition_length * (self.curr_height - cached_height));
+            }
+        }
 
         loop {
             let instruction = self.fetch_and_inc_instruction();
@@ -46,14 +68,9 @@ impl Chamber {
             }
 
             y -= 1;
-            // println!("{:?} at ({},{}) falls one unit", kind, x, y);
-            // self.print_with_current(&kind, x, y);
         }
-
         self.curr_height = self.curr_height.max(y + 1);
-        // println!("{:?} comes to rest at y={}, new height {}", kind, y, self.curr_height);
-        // self.print();
-        self.curr_height
+        None
     }
 
     fn fetch_and_inc_next_kind(&mut self) -> Kind {
@@ -228,20 +245,17 @@ impl Chamber {
             instr_ptr: 0,
             curr_height: 0,
             next_rock: Kind::Dash,
+            cache: HashMap::new(),
         }
     }
     fn fetch_and_inc_instruction(&mut self) -> char {
         let instruction = self.instructions[self.instr_ptr];
-        self.instr_ptr = if self.instr_ptr == self.instructions.len() - 1 {
-            0
-        } else {
-            self.instr_ptr + 1
-        };
+        self.instr_ptr = (self.instr_ptr + 1) % self.instructions.len();
         instruction
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Copy)]
 enum Kind {
     Dash,
     Plus,
