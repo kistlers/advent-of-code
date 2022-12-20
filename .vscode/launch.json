@@ -527,6 +527,42 @@
       "sourceLanguages": [
         "rust"
       ]
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "run day19-2022",
+      "program": "${workspaceFolder}/target/debug/day19-2022",
+      "args": [],
+      "cwd": "${workspaceFolder}/2022/day19",
+      "sourceMap": {},
+      "sourceLanguages": [
+        "rust"
+      ]
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "run day19-2022",
+      "program": "${workspaceFolder}/target/debug/day19-2022",
+      "args": [],
+      "cwd": "${workspaceFolder}/2022/day19",
+      "sourceMap": {},
+      "sourceLanguages": [
+        "rust"
+      ]
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "run day20-2022",
+      "program": "${workspaceFolder}/target/debug/day20-2022",
+      "args": [],
+      "cwd": "${workspaceFolder}/2022/day20",
+      "sourceMap": {},
+      "sourceLanguages": [
+        "rust"
+      ]
     }
   ]
 }
