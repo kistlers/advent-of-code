@@ -13,8 +13,8 @@ fn main() {
     let moves = input_lines.iter().map(|input_line| input_line.split_once_parse::<char, i32>(" ").unwrap()).collect_vec();
 
     let (part1, part2) = count_visited_2(&moves, 9);
-    println!("part1: {}", part1);
-    println!("part2: {}", part2);
+    println!("part1: {part1}");
+    println!("part2: {part2}");
 }
 
 fn count_visited_2(moves: &[(char, i32)], tails: usize) -> (usize, usize) {

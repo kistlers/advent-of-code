@@ -49,14 +49,14 @@ fn main() {
         .filter(|node| !node.is_file && node.size <= 100000)
         .map(|node| node.size)
         .sum::<usize>();
-    println!("part1: {}", part1);
+    println!("part1: {part1}");
 
     let space_required = 30000000 + root.size - 70000000;
     let part2 = root.all_children().iter()
         .filter(|node| !node.is_file && node.size >= space_required)
         .map(|node| node.size)
         .min().unwrap();
-    println!("part2: {}", part2);
+    println!("part2: {part2}");
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]

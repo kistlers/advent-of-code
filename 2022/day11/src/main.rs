@@ -20,9 +20,9 @@ fn main() {
             .collect_vec());
 
     let part1 = calculate(monkeys.clone(), 20, 3);
-    println!("part1: {}", part1);
+    println!("part1: {part1}");
     let part2 = calculate(monkeys, 10000, 1);
-    println!("part2: {}", part2);
+    println!("part2: {part2}");
 }
 
 fn calculate(mut monkeys: Monkeys, rounds: usize, divide_by: usize) -> usize {

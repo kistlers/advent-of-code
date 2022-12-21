@@ -57,8 +57,8 @@ fn main() {
         ]))]);
 
     let part1 = &inputs.iter().map(|(opponent, me)| score_part_1[opponent][me]).sum::<u32>();
-    println!("part1: {}", part1);
+    println!("part1: {part1}");
 
     let part2 = &inputs.iter().map(|(opponent, me)| score_part_2[opponent][me]).sum::<u32>();
-    println!("part2: {}", part2);
+    println!("part2: {part2}");
 }

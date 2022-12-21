@@ -55,8 +55,8 @@ fn main() {
     }
 
     let part1 = stacks1.iter().map(|stack| stack.last().unwrap()).join("");
-    println!("part1: {}", part1);
+    println!("part1: {part1}");
 
     let part2 = stacks2.iter().map(|stack| stack.last().unwrap()).join("");
-    println!("part2: {}", part2);
+    println!("part2: {part2}");
 }

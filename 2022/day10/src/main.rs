@@ -27,7 +27,7 @@ fn main() {
 
     let part1 = (20..x.len()).step_by(40)
         .map(|cycle| cycle as i64 * x[cycle]).sum::<i64>();
-    println!("part1: {}", part1);
+    println!("part1: {part1}");
 
     let rows: usize = 6;
     let cols: usize = 40;

@@ -34,8 +34,8 @@ fn main() {
             }
         }
     }
-    println!("part1: {}", part1);
-    println!("part2: {}", part2);
+    println!("part1: {part1}");
+    println!("part2: {part2}");
 }
 
 fn visible(tree: usize, heights: &[usize]) -> bool {

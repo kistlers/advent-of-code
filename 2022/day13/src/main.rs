@@ -29,7 +29,7 @@ fn main() {
         .filter(|(_, (left, right))| !left.cmp(right).is_gt())
         .map(|(index, _)| index + 1)
         .sum::<usize>();
-    println!("part1: {}", part1);
+    println!("part1: {part1}");
 
     let divider2 = "[[2]]".parse::<Packet>().unwrap();
     let divider6 = "[[6]]".parse::<Packet>().unwrap();
@@ -40,7 +40,7 @@ fn main() {
         .collect_vec();
     let part2 = (sorted_packets.iter().position(|p| **p == divider2).unwrap() + 1)
         * (sorted_packets.iter().position(|p| **p == divider6).unwrap() + 1);
-    println!("part2: {}", part2);
+    println!("part2: {part2}");
 }
 
 impl Ord for Packet {

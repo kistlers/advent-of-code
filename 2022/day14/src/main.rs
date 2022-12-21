@@ -47,7 +47,7 @@ fn main() {
             break grid.iter().flatten().filter(|g| **g == 2).count();
         }
     };
-    println!("part1: {}", part1);
+    println!("part1: {part1}");
 
     let mut grid = grid_pristine.clone();
     let part2 = loop {
@@ -57,7 +57,7 @@ fn main() {
             break grid.iter().flatten().filter(|g| **g == 2).count();
         }
     };
-    println!("part2: {}", part2);
+    println!("part2: {part2}");
 }
 
 fn next_sand(grid: &mut [Vec<usize>], has_floor: bool, y_abyss: usize) -> bool {

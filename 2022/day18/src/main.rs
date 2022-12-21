@@ -35,8 +35,8 @@ fn main() {
 
         (part1, part2)
     });
-    println!("part1: {}", part1);
-    println!("part2: {}", part2);
+    println!("part1: {part1}");
+    println!("part2: {part2}");
 }
 
 fn bfs(

@@ -28,13 +28,13 @@ fn main() {
         let valves_with_rate = valves.values().filter(|(rate, _)| *rate >0).count();
         let mut network = Network::new(&valves, valves_with_rate);
         let part1 = network.release( "AA", BTreeSet::new(), 30, false);
-        println!("part1: {}", part1);
+        println!("part1: {part1}");
 
         // let mut network = Network::new(&valves, valves_with_rate);
         let part2 = network.release("AA", BTreeSet::new(), 26, true);
         (part1, part2)
     });
-    println!("part2: {}", part2); // should be 2741
+    println!("part2: {part2}"); // should be 2741
 }
 
 

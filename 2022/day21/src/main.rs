@@ -20,8 +20,8 @@ fn main() {
         let part2 = match_values_calc_human(0, &monkeys["root"], &monkeys);
         (part1, part2)
     });
-    println!("part1: {}", part1);
-    println!("part2: {}", part2);
+    println!("part1: {part1}");
+    println!("part2: {part2}");
 }
 
 fn evaluate(curr: &Monkey, monkeys: &HashMap<String, Monkey>) -> i64 {

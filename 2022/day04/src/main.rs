@@ -15,12 +15,12 @@ fn main() {
     let part1 = range_pairs.iter()
         .filter(|range_pair| range_pair.full_overlap())
         .count();
-    println!("part1: {}", part1);
+    println!("part1: {part1}");
 
     let part2 = range_pairs.iter()
         .filter(|range_pair| range_pair.overlap())
         .count();
-    println!("part2: {}", part2);
+    println!("part2: {part2}");
 }
 
 #[derive(Debug, Clone)]

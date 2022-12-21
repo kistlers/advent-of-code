@@ -15,8 +15,8 @@ fn main() {
         let part2 = Chamber::new(instructions).solve_for_steps(1_000_000_000_000);
         (part1, part2)
     });
-    println!("part1: {}", part1);
-    println!("part2: {}", part2);
+    println!("part1: {part1}");
+    println!("part2: {part2}");
 }
 
 #[derive(Clone, Debug)]

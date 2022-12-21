@@ -15,7 +15,7 @@ fn main() {
             let intersection = *(&left_chars & &right_chars).into_iter().collect::<Vec<char>>().first().unwrap();
             priority(intersection)
         }).sum::<u32>();
-    println!("part1: {}", part1);
+    println!("part1: {part1}");
 
     let part2 = input_lines.chunks(3)
         .map(|chunk| {
@@ -24,7 +24,7 @@ fn main() {
             let intersection = *(&(&packs[0] & &packs[1]) & &packs[2]).into_iter().collect::<Vec<char>>().first().unwrap();
             priority(intersection)
         }).sum::<u32>();
-    println!("part2: {}", part2);
+    println!("part2: {part2}");
 }
 
 fn priority(c: char) -> u32 {
