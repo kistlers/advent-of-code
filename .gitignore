@@ -13,3 +13,9 @@ Cargo.lock
 
 .rustc_info.json
 **/.cargo/
+
+.idea
+
+.env
+
+__pycache__
