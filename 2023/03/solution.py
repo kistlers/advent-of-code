@@ -1,7 +1,8 @@
+from __future__ import annotations  # allow circular type hints
+
 import math
 from dataclasses import dataclass, field
 from typing import Iterable
-
 from utils import run
 import re
 
@@ -10,8 +11,8 @@ import re
 class Symbol:
     symbol: str
     loc: (int, int)
-    # default values are stored as class, not instance variables
-    adjacent_to: list[int] = field(default_factory=list)
+    # default values are stored as class, not instance variables when not using default_factory
+    adjacent_to: list[Part] = field(default_factory=list)
 
 
 @dataclass
