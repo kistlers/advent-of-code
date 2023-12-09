@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from itertools import count
+import itertools
 from typing import Iterable
 
 from utils import run
@@ -39,7 +39,7 @@ def is_part2_seed(seed: int, part_2_ranges: list[(int, int)]):
 
 def solve_part_2(seed_location_inverse, part_2_ranges: list[(int, int)]):
     # go in reverse from 1 up and find the first that matches range
-    for loc in count():
+    for loc in itertools.count():
         seed = seed_location_inverse(loc)
         if is_part2_seed(seed, part_2_ranges):
             return loc
