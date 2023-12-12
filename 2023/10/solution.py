@@ -29,35 +29,74 @@ def solve(input_data: str) -> Iterable[int]:
 
     current = si, sj
     loop = {current}
-    while new_neighbours := [neigh for neigh in neighbours(current) if neigh not in loop]:
+    new_neighbours = set(neighbours(current))
+    while new_neighbours:
         current = new_neighbours.pop()
         loop.add(current)
+        new_neighbours = set(neighbours(current)).difference(loop)
 
     yield len(loop) // 2
 
-    # border = sorted(
-    #     [spot for spots in [[(i, 0), (i, len(grid) - 1)] for i in range(len(grid[0]))]
-    #      + [[(0, j), (len(grid[0]) - 1, j)] for j in range(len(grid))]
-    #      for spot in spots]
-    # )
-    # outside_spot = [spot for spot in border if spot not in loop][0]
-    # print(outside_spot)
-    #
-    # def all_neighbours(curr: tuple[int, int]) -> Iterable[tuple[int, int]]:
-    #     ci, cj = curr
-    #     for di, dj in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
-    #         if 0 <= ci + di < len(grid) and 0 <= cj + dj < len(grid[0]):
-    #             yield ci + di, cj + dj
-    #
-    # outside_count = 1
-    # visited = loop
-    # current = outside_spot
-    # while new_neighbours := [neigh for neigh in all_neighbours(current) if neigh not in visited]:
-    #     current = new_neighbours.pop()
-    #     outside_count += 1
-    #
-    # inside_count =
-    # print(f"outside_count = {outside_count}, loop = {len(loop)} -> ")
+    blown_up_grid = [['.'] * len(grid[0]) * 3 for _ in range(len(grid) * 3)]
+
+    def fill_blown_up_grid(i: int, j: int, original_symbol: str) -> None:
+        new_ij_symbol = 'X' if ((i - 1) // 3, (j - 1) // 3) in loop else '*'
+        match original_symbol:
+            case 'S':
+                blown_up_grid[i][j] = new_ij_symbol
+                blown_up_grid[i - 1][j] = 'X'
+                blown_up_grid[i + 1][j] = 'X'
+                blown_up_grid[i][j - 1] = 'X'
+                blown_up_grid[i][j + 1] = 'X'
+            case '|':
+                blown_up_grid[i][j] = new_ij_symbol
+                blown_up_grid[i - 1][j] = 'X'
+                blown_up_grid[i + 1][j] = 'X'
+            case '-':
+                blown_up_grid[i][j] = new_ij_symbol
+                blown_up_grid[i][j - 1] = 'X'
+                blown_up_grid[i][j + 1] = 'X'
+            case 'L':
+                blown_up_grid[i][j] = new_ij_symbol
+                blown_up_grid[i - 1][j] = 'X'
+                blown_up_grid[i][j + 1] = 'X'
+            case 'J':
+                blown_up_grid[i][j] = new_ij_symbol
+                blown_up_grid[i - 1][j] = 'X'
+                blown_up_grid[i][j - 1] = 'X'
+            case '7':
+                blown_up_grid[i][j] = new_ij_symbol
+                blown_up_grid[i + 1][j] = 'X'
+                blown_up_grid[i][j - 1] = 'X'
+            case 'F':
+                blown_up_grid[i][j] = new_ij_symbol
+                blown_up_grid[i + 1][j] = 'X'
+                blown_up_grid[i][j + 1] = 'X'
+            case '.':
+                blown_up_grid[i][j] = new_ij_symbol
+
+    def all_neighbours_blown_up_grid(curr: tuple[int, int]) \
+            -> Iterable[tuple[int, int]]:
+        curri, currj = curr
+        for di, dj in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
+            if 0 <= curri + di < len(blown_up_grid) and 0 <= currj + dj < len(blown_up_grid[0]):
+                yield curri + di, currj + dj
+
+    current = 0, 0
+    outside_valid_count = 0
+
+    to_visit = {current}
+    while to_visit:
+        ci, cj = current = to_visit.pop()
+        if blown_up_grid[ci][cj] == 'X':
+            continue
+        if blown_up_grid[ci][cj] == '*':
+            outside_valid_count += 1
+        blown_up_grid[ci][cj] = 'X'
+        to_visit = to_visit.union(all_neighbours_blown_up_grid(current))
+
+    inside_count = len(grid) * len(grid[0]) - outside_valid_count - len(loop)
+    yield inside_count
 
 
 run(solve)
