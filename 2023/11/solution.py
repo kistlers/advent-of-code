@@ -4,10 +4,14 @@ from typing import Iterable
 from utils import run
 
 
+def transpose(matrix: Iterable[Iterable[str]]) -> Iterable[Iterable[int]]:
+    return list(map(list, itertools.zip_longest(*matrix, fillvalue=None)))
+
+
 def solve(input_data: str) -> Iterable[int]:
     initial_grid = [list(line) for line in input_data.splitlines()]
     empty_rows = set([i for i, row in enumerate(initial_grid) if all(v == '.' for v in row)])
-    transposed_initial = list(map(list, itertools.zip_longest(*initial_grid, fillvalue=None)))
+    transposed_initial = transpose(initial_grid)
     empty_columns = set([j for j, col in enumerate(transposed_initial) if all(v == '.' for v in col)])
 
     galaxies = [(i, j) for i, row in enumerate(initial_grid) for j, v in enumerate(row) if v == '#']
