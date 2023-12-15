@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from copy import deepcopy
 from typing import Callable, Tuple, Iterable, Optional
 
@@ -295,7 +296,14 @@ def solve_for_input(
     problem_input = load_input(year, day)
 
     print("\nComputing answers for input now:")
-    for part, answer in zip(parts, answer_func(problem_input)):
+
+    start_time = time.time()
+    answers = list(answer_func(problem_input))
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print(f"Computed answers in {execution_time:.3f} seconds")
+
+    for part, answer in zip(parts, answers):
         print(f"🧮 Computed answer {answer} for part {part} of day {day}")
 
         if not submit_answer:
