@@ -39,42 +39,6 @@ def solve(input_data: str) -> Iterable[int]:
 
     blown_up_grid = [['.'] * len(grid[0]) * 3 for _ in range(len(grid) * 3)]
 
-    def fill_blown_up_grid(i: int, j: int, original_symbol: str) -> None:
-        new_ij_symbol = 'X' if ((i - 1) // 3, (j - 1) // 3) in loop else '*'
-        match original_symbol:
-            case 'S':
-                blown_up_grid[i][j] = new_ij_symbol
-                blown_up_grid[i - 1][j] = 'X'
-                blown_up_grid[i + 1][j] = 'X'
-                blown_up_grid[i][j - 1] = 'X'
-                blown_up_grid[i][j + 1] = 'X'
-            case '|':
-                blown_up_grid[i][j] = new_ij_symbol
-                blown_up_grid[i - 1][j] = 'X'
-                blown_up_grid[i + 1][j] = 'X'
-            case '-':
-                blown_up_grid[i][j] = new_ij_symbol
-                blown_up_grid[i][j - 1] = 'X'
-                blown_up_grid[i][j + 1] = 'X'
-            case 'L':
-                blown_up_grid[i][j] = new_ij_symbol
-                blown_up_grid[i - 1][j] = 'X'
-                blown_up_grid[i][j + 1] = 'X'
-            case 'J':
-                blown_up_grid[i][j] = new_ij_symbol
-                blown_up_grid[i - 1][j] = 'X'
-                blown_up_grid[i][j - 1] = 'X'
-            case '7':
-                blown_up_grid[i][j] = new_ij_symbol
-                blown_up_grid[i + 1][j] = 'X'
-                blown_up_grid[i][j - 1] = 'X'
-            case 'F':
-                blown_up_grid[i][j] = new_ij_symbol
-                blown_up_grid[i + 1][j] = 'X'
-                blown_up_grid[i][j + 1] = 'X'
-            case '.':
-                blown_up_grid[i][j] = new_ij_symbol
-
     def all_neighbours_blown_up_grid(curr: tuple[int, int]) \
             -> Iterable[tuple[int, int]]:
         curri, currj = curr

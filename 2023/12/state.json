@@ -1,0 +1,20 @@
+{
+  "1": {
+    "attempts": [
+      7007
+    ],
+    "solved": true,
+    "solution": 7007,
+    "upper_bound": 7007,
+    "lower_bound": 7007
+  },
+  "2": {
+    "attempts": [
+      3476169006222
+    ],
+    "solved": true,
+    "solution": 3476169006222,
+    "upper_bound": 3476169006222,
+    "lower_bound": 3476169006222
+  }
+}
