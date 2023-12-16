@@ -239,7 +239,13 @@ def sample(answer_func: Callable[[str], Iterable[int | str]]) -> bool:
     for sample in load_samples():
         sample_input, sample_output = sample
 
-        for part, actual in enumerate(answer_func(sample_input), 1):
+        start_time = time.time()
+        sample_answers = list(answer_func(sample_input))
+        end_time = time.time()
+        execution_time = end_time - start_time
+        print(f"Computed sample answers in {execution_time:.3f} seconds")
+
+        for part, actual in enumerate(sample_answers, 1):
             if part not in sample_output:
                 continue
 
