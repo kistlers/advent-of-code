@@ -6,3 +6,4 @@ python-dotenv==0.21.0
 html2text==2020.1.16
 
 portion==2.3.0
+astar~=0.99
