@@ -1,7 +1,7 @@
 import json
 import os
-import time
 from copy import deepcopy
+from time import time
 from typing import Callable, Tuple, Iterable, Optional
 
 import html2text
@@ -80,7 +80,9 @@ def load_samples() -> Iterable[Tuple[str, dict[int, int | str]]]:
             elif sample_file.startswith("sample_2"):
                 yield sample_input, {2: sample_outputs[0]}
             else:
-                yield sample_input, dict(enumerate(sample_outputs, 1))
+                yield sample_input, dict(
+                    enumerate(filter(lambda x: bool(x), sample_outputs), 1)
+                )
 
     if not any_samples:
         print(f"{Fore.YELLOW}🫣 Could not find any sample files.{Style.RESET_ALL}")
@@ -211,49 +213,21 @@ def save_state(state: dict) -> None:
         state_file.write(json.dumps(state, indent=2))
 
 
-def test(answer_func: Callable[[str], Iterable[int | str]], cases: list[dict]) -> bool:
-    all_passed = True
-
-    if not cases:
-        print(f"{Fore.YELLOW}🤷 No test cases defined.{Style.RESET_ALL}")
-        return all_passed
-
-    for tc in cases:
-        answer = answer_func(tc["input"])
-        if str(tc["output"]) == str(answer):
-            print(
-                f"{Fore.GREEN}🎄 Test passed {Style.RESET_ALL}[Part {tc['level']}] Input: '{tc['input']}'; Output: '{tc['output']}'"
-            )
-        else:
-            all_passed = False
-            print(
-                f"{Fore.RED}🔥 Test failed {Style.RESET_ALL}[Part {tc['level']}] Input: '{tc['input']}'; Submitted: '{answer}'; Correct: '{tc['output']}'"
-            )
-
-    return all_passed
-
-
 def sample(answer_func: Callable[[str], Iterable[int | str]]) -> bool:
     print("\nLooking for samples:")
 
     for sample in load_samples():
         sample_input, sample_output = sample
 
-        start_time = time.time()
-        sample_answers = list(answer_func(sample_input))
-        end_time = time.time()
-        execution_time = end_time - start_time
-        print(f"Computed sample answers in {execution_time:.3f} seconds")
-
-        for part, actual in enumerate(sample_answers, 1):
+        for part, actual in enumerate(answer_func(sample_input), 1):
             if part not in sample_output:
+                print(
+                    f"{Fore.YELLOW}🤷 No sample solution for part {part}.{Style.RESET_ALL}"
+                )
                 continue
 
             expected = sample_output[part]
-            print(
-                f"{Fore.BLUE}🧮 Computed sample answer {actual} "
-                f"(expected {expected}) for part {part}.{Style.RESET_ALL}"
-            )
+            log_correct_or_wrong(actual, expected)
             if actual != expected:
                 return False
 
@@ -302,16 +276,7 @@ def solve_for_input(
     problem_input = load_input(year, day)
 
     print("\nComputing answers for input now:")
-
-    start_time = time.time()
-    answers = list(answer_func(problem_input))
-    end_time = time.time()
-    execution_time = end_time - start_time
-    print(f"Computed answers in {execution_time:.3f} seconds")
-
-    for part, answer in zip(parts, answers):
-        print(f"🧮 Computed answer {answer} for part {part} of day {day}")
-
+    for part, answer in zip(parts, answer_func(problem_input)):
         if not submit_answer:
             print(f"{Fore.BLUE}⏭️ Skipping submission.{Style.RESET_ALL}")
 
@@ -323,9 +288,32 @@ def get_day_and_year() -> tuple[int, int]:
     return day, year
 
 
+def answer_func_with_timings(
+        answer_func: Callable[[str], Iterable[int | str]]
+) -> Callable[[str], Iterable[int | str]]:
+    day, year = get_day_and_year()
+
+    def run_answer_func_with_timings(input_data: str) -> Iterable[int | str]:
+        start_time = time()
+        for part, answer in enumerate(answer_func(input_data), 1):
+            end_time = time()
+            execution_time = end_time - start_time
+            time_str = (
+                f"{execution_time:.2f} s"
+                if execution_time > 1
+                else f"{execution_time * 1000:.2f} ms"
+            )
+            print(
+                f"🧮 Computed answer {answer} for part {part} of day {day} in {time_str}"
+            )
+            yield answer
+            start_time = time()
+
+    return run_answer_func_with_timings
+
+
 def run(
         answer_func: Callable[[str], Iterable[int | str]],
-        test_cases=None,
         skip_sample: bool = False,
         submit_answer: bool = True,
         parts: tuple[int] = (1, 2),
@@ -333,14 +321,12 @@ def run(
     day, year = get_day_and_year()
     print(f"{Fore.MAGENTA}Advent of Code {year}, Day {day}:{Style.RESET_ALL}")
 
+    answer_func = answer_func_with_timings(answer_func)
+
     load_input(year, day)
 
     if not skip_sample and not sample(answer_func):
         print(f"{Fore.RED}🧐 Got wrong answer for sample. Stopping.{Style.RESET_ALL}")
-        return
-
-    if not test(answer_func, test_cases):
-        print(f"{Fore.RED}🧪 Tests failed. Stopping.{Style.RESET_ALL}")
         return
 
     solve_for_input(answer_func, parts, submit_answer)
