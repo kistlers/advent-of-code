@@ -11,10 +11,14 @@
     "lower_bound": 40131
   },
   "2": {
-    "attempts": [],
-    "solved": false,
-    "solution": null,
-    "upper_bound": null,
-    "lower_bound": null
+    "attempts": [
+      26740212428742196,
+      26740212428742196,
+      104454050898331
+    ],
+    "solved": true,
+    "solution": 104454050898331,
+    "upper_bound": 104454050898331,
+    "lower_bound": 104454050898331
   }
 }
