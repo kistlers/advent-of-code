@@ -94,6 +94,10 @@ def is_answer_possible(answer, part_state: dict) -> bool:
     lower_bound = part_state.get("lower_bound")
     upper_bound = part_state.get("upper_bound")
 
+    if answer is None or (isinstance(answer, str) and len(answer.strip()) == 0):
+        print(f"{Fore.RED}❌ Answer must not be blank.{Style.RESET_ALL}")
+        return False
+
     if answer in attempts:
         print(f"{Fore.RED}❌ Already tried this value.{Style.RESET_ALL}")
         return False
