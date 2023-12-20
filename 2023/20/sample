@@ -1,2 +1,8 @@
-
+broadcaster -> a
+%a -> inv, con
+&inv -> b
+%b -> con
+&con -> output
 ---
+11687500
+1

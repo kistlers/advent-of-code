@@ -1,0 +1,22 @@
+{
+  "1": {
+    "attempts": [
+      0,
+      825167435
+    ],
+    "solved": true,
+    "solution": 825167435,
+    "upper_bound": 825167435,
+    "lower_bound": 825167435
+  },
+  "2": {
+    "attempts": [
+      361028183880,
+      225514321828633
+    ],
+    "solved": true,
+    "solution": 225514321828633,
+    "upper_bound": 225514321828633,
+    "lower_bound": 225514321828633
+  }
+}
