@@ -19,3 +19,7 @@ Cargo.lock
 .env
 
 __pycache__
+
+input
+inputs
+problem.md
