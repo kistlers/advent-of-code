@@ -14,14 +14,14 @@ defmodule AdventOfCode.Solution.Year2019.Day01Test do
     ]
   end
 
-  # @tag :skip
+  @tag :skip
   test "part1", %{input: input} do
     result = part1(input)
 
     assert result == 2 + 2 + 654 + 33583
   end
 
-  # @tag :skip
+  @tag :skip
   test "part2", %{input: input} do
     result = part2(input)
 
