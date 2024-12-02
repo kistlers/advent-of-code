@@ -1,40 +1,46 @@
 defmodule AdventOfCode.Solution.Year2024.Day01 do
   def part1(input) do
-    columns = parse_to_sorted_columns(input)
-
-    columns
-    |> Stream.zip()
-    |> Enum.map(fn {a, b} -> abs(b - a) end)
+    parse_to_sorted_columns(input)
+    |> calculate_column_differences()
     |> Enum.sum()
   end
 
   def part2(input) do
-    columns = parse_to_sorted_columns(input)
-
-    left = Enum.at(columns, 0)
-    right = Enum.at(columns, 1)
+    [left, right] = parse_to_sorted_columns(input)
 
     left
-    |> Stream.map(fn left_item ->
-      left_item * Enum.count(right, fn right_item -> right_item == left_item end)
-    end)
+    |> Enum.map(&calculate_weight(&1, right))
     |> Enum.sum()
   end
 
-  def parse_to_sorted_columns(input) do
+  defp parse_to_sorted_columns(input) do
     input
     |> String.trim()
     |> String.split("\n", trim: true)
-    |> Stream.map(fn
-      line ->
-        String.split(line, ~r/\s+/, trim: true)
-        |> Enum.map(&String.to_integer/1)
-    end)
-    |> Enum.to_list()
-    # transpose rows to columns
-    |> Stream.zip()
-    |> Stream.map(&Tuple.to_list/1)
-    |> Stream.map(&Enum.sort/1)
-    |> Enum.to_list()
+    |> Enum.map(&parse_line_to_integers/1)
+    |> transpose()
+    |> Enum.map(&Enum.sort/1)
+  end
+
+  defp parse_line_to_integers(line) do
+    line
+    |> String.split(~r/\s+/, trim: true)
+    |> Enum.map(&String.to_integer/1)
+  end
+
+  defp transpose(rows) do
+    rows
+    |> Enum.zip()
+    |> Enum.map(&Tuple.to_list/1)
+  end
+
+  defp calculate_column_differences(columns) do
+    columns
+    |> Enum.zip()
+    |> Enum.map(fn {a, b} -> abs(b - a) end)
+  end
+
+  defp calculate_weight(left_item, right) do
+    left_item * Enum.count(right, fn right_item -> right_item == left_item end)
   end
 end
