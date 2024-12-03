@@ -8,10 +8,10 @@ defmodule AdventOfCode.Solution.Year2024.Day03Test do
       test_cases: [
         %{
           input: """
-          0
+          xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))
           """,
-          expected_part1: 1,
-          expected_part2: 2
+          expected_part1: 161,
+          expected_part2: 48
         }
       ]
     ]
