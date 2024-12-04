@@ -3,88 +3,57 @@ defmodule AdventOfCode.Solution.Year2024.Day04 do
     {grid, height, width} = parse_grid(input)
 
     generate_coords(0, height - 1, 0, width - 1)
-    |> Enum.map(fn {row, col} ->
-      cond do
-        char_at(grid, row, col) == "X" ->
-          find_xmas_part1_all_dirs(grid, height, width, row, col)
-
-        true ->
-          0
-      end
-    end)
+    |> Enum.map(&process_part1(grid, height, width, &1))
     |> Enum.sum()
+  end
+
+  defp process_part1(grid, height, width, {row, col}) do
+    case char_at(grid, row, col) do
+      "X" -> find_xmas_part1_all_dirs(grid, height, width, row, col)
+      _ -> 0
+    end
   end
 
   def part2(input) do
     {grid, height, width} = parse_grid(input)
 
     generate_coords(1, height - 2, 1, width - 2)
-    |> Enum.count(fn {row, col} ->
-      cond do
-        char_at(grid, row, col) == "A" ->
-          find_x_mas_part2(grid, height, width, row, col)
+    |> Enum.count(&process_part2(grid, &1))
+  end
 
-        true ->
-          false
-      end
-    end)
+  defp process_part2(grid, {row, col}) do
+    case char_at(grid, row, col) do
+      "A" -> find_x_mas_part2(grid, row, col)
+      _ -> false
+    end
   end
 
   defp generate_coords(row_min, row_max, col_min, col_max) do
-    row_min..row_max
-    |> Enum.flat_map(fn row ->
-      col_min..col_max
-      |> Enum.map(fn col ->
-        {row, col}
-      end)
-    end)
+    for row <- row_min..row_max, col <- col_min..col_max, do: {row, col}
   end
 
-  defp find_x_mas_part2(grid, height, width, row, col) do
+  defp find_x_mas_part2(grid, row, col) do
     ul = char_at(grid, row - 1, col - 1)
     ur = char_at(grid, row - 1, col + 1)
     ll = char_at(grid, row + 1, col - 1)
     lr = char_at(grid, row + 1, col + 1)
 
     case {ul, ur, ll, lr} do
-      {"M", "M", "S", "S"} ->
-        # M.M
-        # .A.
-        # S.S
-        true
-
-      {"M", "S", "M", "S"} ->
-        # M.S
-        # .A.
-        # M.S
-        true
-
-      {"S", "S", "M", "M"} ->
-        # S.S
-        # .A.
-        # M.M
-        true
-
-      {"S", "M", "S", "M"} ->
-        # S.M
-        # .A.
-        # S.M
-        true
-
-      _ ->
-        false
+      {"M", "M", "S", "S"} -> true
+      {"M", "S", "M", "S"} -> true
+      {"S", "S", "M", "M"} -> true
+      {"S", "M", "S", "M"} -> true
+      _ -> false
     end
   end
 
   defp find_xmas_part1_all_dirs(grid, height, width, row, col) do
     [{0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}, {1, 0}, {1, 1}]
-    |> Enum.count(fn dir ->
-      find_xmas_part1(grid, height, width, {row, col}, dir, ["X", "M", "A", "S"])
-    end)
+    |> Enum.count(&find_xmas_part1(grid, height, width, {row, col}, &1, ["X", "M", "A", "S"]))
   end
 
   # always treat as found if no characters remaining
-  defp find_xmas_part1(grid, height, width, {row, col}, {d_row, d_col}, []) do
+  defp find_xmas_part1(_, _, _, _, _, []) do
     true
   end
 
@@ -130,12 +99,7 @@ defmodule AdventOfCode.Solution.Year2024.Day04 do
     height = length(lines)
     width = String.length(Enum.at(lines, 0))
 
-    grid =
-      lines
-      |> Enum.map(fn line ->
-        line
-        |> String.graphemes()
-      end)
+    grid = Enum.map(lines, &String.graphemes/1)
 
     {grid, height, width}
   end
