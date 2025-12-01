@@ -20,7 +20,7 @@ defmodule AdventOfCode.Solution.Year2024.Day06Test do
           ......#...
           """,
           expected_part1: 41,
-          expected_part2: 2
+          expected_part2: 6
         }
       ]
     ]
@@ -34,7 +34,7 @@ defmodule AdventOfCode.Solution.Year2024.Day06Test do
     end)
   end
 
-  @tag :skip
+#  @tag :skip
   test "part2", %{test_cases: test_cases} do
     Enum.each(test_cases, fn %{input: input, expected_part2: expected} ->
       result = part2(input)
