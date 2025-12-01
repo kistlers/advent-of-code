@@ -32,3 +32,7 @@ problem.md
 ### Elixir
 
 ***.elixir_ls
+
+### Kotlin
+
+kotlin/**/*.txt
