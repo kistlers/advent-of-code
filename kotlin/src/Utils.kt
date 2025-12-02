@@ -11,7 +11,7 @@ fun readInput(year: String, day: String) =
 fun readTest(year: String, day: String) =
     Path("src/y$year/d$day/test.txt").readText().trim().lines()
 
-fun checkTest(expected: Int, actual: Int) =
+fun checkTest(expected: Long, actual: Long) =
     check(expected == actual) { "Expected: $expected, Actual: $actual" }
 
 /** Converts string to md5 hash. */

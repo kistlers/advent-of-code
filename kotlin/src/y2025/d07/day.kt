@@ -9,9 +9,9 @@ fun main() {
     val year = "2025"
     val day = "07"
 
-    fun part1(input: List<String>): Int = input.size
+    fun part1(input: List<String>): Long = input.size.toLong()
 
-    fun part2(input: List<String>): Int = input.size
+    fun part2(input: List<String>): Long = input.size.toLong()
 
     val testInput = readTest(year, day)
     val input = readInput(year, day)

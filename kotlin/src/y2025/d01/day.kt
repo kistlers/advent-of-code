@@ -9,21 +9,21 @@ fun main() {
     val year = "2025"
     val day = "01"
 
-    fun findZeroes(rotations: List<Int>) =
+    fun findZeroes(rotations: List<Long>): Long =
         rotations
-            .fold(50 to 0) { acc, curr ->
-                val next = (acc.first + curr).mod(100)
-                if (next == 0) 0 to (acc.second + 1) else next to acc.second
+            .fold(50L to 0L) { acc, curr ->
+                val next = (acc.first + curr).mod(100L)
+                if (next == 0L) 0L to (acc.second + 1) else next to acc.second
             }
             .second
 
     /** parse to plus or minus rotations, then fold to find all zeroes */
-    fun part1(input: List<String>): Int =
+    fun part1(input: List<String>): Long =
         findZeroes(
             input.map {
                 when (it[0]) {
-                    'R' -> it.substring(1).toInt()
-                    'L' -> -it.substring(1).toInt()
+                    'R' -> it.substring(1).toLong()
+                    'L' -> -it.substring(1).toLong()
                     else -> error("Invalid input: $it")
                 }
             }
@@ -32,12 +32,12 @@ fun main() {
     /**
      * parse to a list of n+/- rotations, the fold to find all zeroes with the same logic as part1
      */
-    fun part2(input: List<String>): Int =
+    fun part2(input: List<String>): Long =
         findZeroes(
             input.flatMap {
                 when (it[0]) {
-                    'R' -> (1..it.substring(1).toInt()).map { 1 }
-                    'L' -> (1..it.substring(1).toInt()).map { -1 }
+                    'R' -> (1..it.substring(1).toLong()).map { 1 }
+                    'L' -> (1..it.substring(1).toLong()).map { -1 }
                     else -> error("Invalid input: $it")
                 }
             }
