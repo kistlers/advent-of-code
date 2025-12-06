@@ -11,20 +11,19 @@ fun main() {
 
     fun findZeroes(rotations: List<Long>): Long =
         rotations
-            .fold(50L to 0L) { acc, curr ->
-                val next = (acc.first + curr).mod(100L)
-                if (next == 0L) 0L to (acc.second + 1) else next to acc.second
-            }
-            .second
+            .runningFold(50L) { acc, curr -> (acc + curr).mod(100L) }
+            .drop(1) // exclude the initial starting position
+            .count { it == 0L }
+            .toLong()
 
     /** parse to plus or minus rotations, then fold to find all zeroes */
     fun part1(input: List<String>): Long =
         findZeroes(
-            input.map {
-                when (it[0]) {
-                    'R' -> it.substring(1).toLong()
-                    'L' -> -it.substring(1).toLong()
-                    else -> error("Invalid input: $it")
+            input.map { line ->
+                when (val dir = line.first()) {
+                    'R' -> line.drop(1).toLong()
+                    'L' -> -line.drop(1).toLong()
+                    else -> error("Invalid input: $line (unknown direction '$dir')")
                 }
             }
         )
@@ -34,12 +33,16 @@ fun main() {
      */
     fun part2(input: List<String>): Long =
         findZeroes(
-            input.flatMap {
-                when (it[0]) {
-                    'R' -> (1..it.substring(1).toLong()).map { 1 }
-                    'L' -> (1..it.substring(1).toLong()).map { -1 }
-                    else -> error("Invalid input: $it")
+            input.flatMap { line ->
+                val dir = line.first()
+                val count = line.drop(1).toLong()
+                val step = when (dir) {
+                    'R' -> 1L
+                    'L' -> -1L
+                    else -> error("Invalid input: $line (unknown direction '$dir')")
                 }
+                // expand into unit rotations to count intermediate zeroes
+                List(count.toInt()) { step }
             }
         )
 
