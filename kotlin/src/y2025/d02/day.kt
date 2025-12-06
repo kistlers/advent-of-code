@@ -10,21 +10,16 @@ fun main() {
     val day = "02"
 
     fun ids(input: List<String>): Sequence<Long> =
-        input.first()
-            .split(',')
-            .asSequence()
-            .flatMap { range ->
-                val (start, end) = range.split('-').map(String::toLong)
-                (start..end).asSequence()
-            }
+        input.first().split(',').asSequence().flatMap { range ->
+            val (start, end) = range.split('-').map(String::toLong)
+            (start..end).asSequence()
+        }
 
     fun String.isRepeatingNTimes(n: Int): Boolean =
         length % n == 0 && this == take(length / n).repeat(n)
 
     fun part1(input: List<String>): Long =
-        ids(input)
-            .filter { it.toString().isRepeatingNTimes(2) }
-            .sum()
+        ids(input).filter { it.toString().isRepeatingNTimes(2) }.sum()
 
     fun part2(input: List<String>): Long =
         ids(input)

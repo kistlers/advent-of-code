@@ -23,9 +23,8 @@ fun main() {
         }
 
     fun part1(input: List<String>): Long {
-        val rows: List<List<Long>> = input
-            .dropLast(1)
-            .map { line -> line.trim().split(whitespace).map(String::toLong) }
+        val rows: List<List<Long>> =
+            input.dropLast(1).map { line -> line.trim().split(whitespace).map(String::toLong) }
 
         val width = rows.first().size
         val problems: List<List<Long>> = List(width) { c -> rows.map { it[c] } }
@@ -50,17 +49,18 @@ fun main() {
 
         val rows = padded.dropLast(1)
 
-        val problems: List<List<Long>> = elementsPerProblem.mapIndexed { i, width ->
-            val start = starts[i]
-            // Build each column number by reading downwards across rows
-            List(width) { j ->
-                val col = start + j
-                rows.fold(0L) { acc, line ->
-                    val ch = line[col]
-                    if (ch == ' ') acc else acc * 10 + ch.digitToInt().toLong()
+        val problems: List<List<Long>> =
+            elementsPerProblem.mapIndexed { i, width ->
+                val start = starts[i]
+                // Build each column number by reading downwards across rows
+                List(width) { j ->
+                    val col = start + j
+                    rows.fold(0L) { acc, line ->
+                        val ch = line[col]
+                        if (ch == ' ') acc else acc * 10 + ch.digitToInt().toLong()
+                    }
                 }
             }
-        }
 
         val ops = parseOps(opsLine)
         return grandTotal(problems, ops)

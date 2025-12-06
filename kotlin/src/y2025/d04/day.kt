@@ -12,9 +12,7 @@ fun main() {
     fun parseGrid(input: List<String>): Triple<Array<BooleanArray>, Int, Int> {
         val height = input.size
         val width = input.first().length
-        val grid = Array(height) { i ->
-            BooleanArray(width) { j -> input[i][j] == '@' }
-        }
+        val grid = Array(height) { i -> BooleanArray(width) { j -> input[i][j] == '@' } }
         return Triple(grid, height, width)
     }
 

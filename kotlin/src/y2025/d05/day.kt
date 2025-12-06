@@ -13,10 +13,11 @@ fun main() {
         val rangeLines = input.takeWhile { it.isNotEmpty() }
         val idLines = input.dropWhile { it.isNotEmpty() }.drop(1)
 
-        val ranges = rangeLines.map { line ->
-            val (from, to) = line.split('-').map(String::toLong)
-            from..to
-        }
+        val ranges =
+            rangeLines.map { line ->
+                val (from, to) = line.split('-').map(String::toLong)
+                from..to
+            }
         val ids = idLines.map(String::toLong)
         return ranges to ids
     }
@@ -43,7 +44,8 @@ fun main() {
                     // partial overlap -> count the uncovered tail [end+1..r.end]
                     else -> sum + (r.endInclusive - end) to r.endInclusive
                 }
-            }.first
+            }
+            .first
     }
 
     val testInput = readTest(year, day)

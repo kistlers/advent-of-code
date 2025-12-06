@@ -36,11 +36,12 @@ fun main() {
             input.flatMap { line ->
                 val dir = line.first()
                 val count = line.drop(1).toLong()
-                val step = when (dir) {
-                    'R' -> 1L
-                    'L' -> -1L
-                    else -> error("Invalid input: $line (unknown direction '$dir')")
-                }
+                val step =
+                    when (dir) {
+                        'R' -> 1L
+                        'L' -> -1L
+                        else -> error("Invalid input: $line (unknown direction '$dir')")
+                    }
                 // expand into unit rotations to count intermediate zeroes
                 List(count.toInt()) { step }
             }
