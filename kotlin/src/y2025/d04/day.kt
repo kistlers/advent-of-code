@@ -9,44 +9,45 @@ fun main() {
     val year = "2025"
     val day = "04"
 
-    fun parseGrid(input: List<String>): Triple<Array<Array<Long>>, Int, Int> {
+    fun parseGrid(input: List<String>): Triple<Array<BooleanArray>, Int, Int> {
         val height = input.size
-        val width = input[0].length
-        val grid = Array(height + 2) { Array(width + 2) { 0L } }
-        input.forEachIndexed { i, line ->
-            line.forEachIndexed { j, c -> grid[i + 1][j + 1] = if (c == '@') 1 else 0 }
+        val width = input.first().length
+        val grid = Array(height) { i ->
+            BooleanArray(width) { j -> input[i][j] == '@' }
         }
-
         return Triple(grid, height, width)
     }
 
     fun removeRolls(
-        grid: Array<Array<Long>>,
+        grid: Array<BooleanArray>,
         height: Int,
         width: Int,
-    ): Pair<Long, Array<Array<Long>>> {
-        val newGrid = grid.map { it.clone() }.toTypedArray()
+    ): Pair<Long, Array<BooleanArray>> {
+        fun neighborCount(r: Int, c: Int): Int {
+            var count = 0
+            for (dr in -1..1) {
+                for (dc in -1..1) {
+                    if (dr == 0 && dc == 0) continue
+                    val nr = r + dr
+                    val nc = c + dc
+                    if (nr in 0 until height && nc in 0 until width && grid[nr][nc]) count++
+                }
+            }
+            return count
+        }
+
+        val newGrid = Array(height) { r -> grid[r].clone() }
         var accessible = 0L
-        for (i in 1..height) {
-            for (j in 1..width) {
-                if (
-                    grid[i][j] == 1L &&
-                        grid[i - 1][j] +
-                            grid[i - 1][j - 1] +
-                            grid[i][j - 1] +
-                            grid[i + 1][j - 1] +
-                            grid[i + 1][j] +
-                            grid[i + 1][j + 1] +
-                            grid[i][j + 1] +
-                            grid[i - 1][j + 1] < 4
-                ) {
+        for (i in 0 until height) {
+            for (j in 0 until width) {
+                if (grid[i][j] && neighborCount(i, j) < 4) {
                     accessible++
-                    newGrid[i][j] = 0
+                    newGrid[i][j] = false
                 }
             }
         }
 
-        return Pair(accessible, newGrid)
+        return accessible to newGrid
     }
 
     fun part1(input: List<String>): Long {
