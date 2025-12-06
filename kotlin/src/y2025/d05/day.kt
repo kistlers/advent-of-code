@@ -10,14 +10,14 @@ fun main() {
     val day = "05"
 
     fun parseInput(input: List<String>): Pair<List<ClosedRange<Long>>, List<Long>> {
-        val emptyLineIndex = input.indexOf("")
-        val ranges =
-            input.take(emptyLineIndex).map {
-                val from = it.substringBefore("-").toLong()
-                val to = it.substringAfter("-").toLong()
-                from..to
-            }
-        val ids = input.drop(emptyLineIndex + 1).map { it.toLong() }
+        val rangeLines = input.takeWhile { it.isNotEmpty() }
+        val idLines = input.dropWhile { it.isNotEmpty() }.drop(1)
+
+        val ranges = rangeLines.map { line ->
+            val (from, to) = line.split('-').map(String::toLong)
+            from..to
+        }
+        val ids = idLines.map(String::toLong)
         return ranges to ids
     }
 
@@ -26,7 +26,7 @@ fun main() {
     fun part1(input: List<String>): Long {
         val (ranges, ids) = parseInput(input)
 
-        return ids.count { id -> ranges.any { range -> id in range } }.toLong()
+        return ids.count { id -> ranges.any { id in it } }.toLong()
     }
 
     fun part2(input: List<String>): Long {
@@ -34,22 +34,16 @@ fun main() {
 
         return ranges
             .sortedWith(compareBy({ it.start }, { it.endInclusive }))
-            .fold(0L to -1L) { (idCount, end), range ->
-                // the current range is fully after the current end -> count all
-                if (end < range.start) {
-                    return@fold idCount + range.countLong() to range.endInclusive
+            .fold(0L to -1L) { (sum, end), r ->
+                when {
+                    // current range is fully after the current end -> count all
+                    end < r.start -> sum + r.countLong() to r.endInclusive
+                    // current range is fully covered -> count nothing
+                    end >= r.endInclusive -> sum to end
+                    // partial overlap -> count the uncovered tail [end+1..r.end]
+                    else -> sum + (r.endInclusive - end) to r.endInclusive
                 }
-
-                // the current range is fully covered -> count no elements
-                if (end >= range.endInclusive) {
-                    return@fold idCount to range.endInclusive
-                }
-
-                // partially covered, count elements in range [end+1, range.endInclusive]
-                return@fold idCount + (end + 1..range.endInclusive).countLong() to
-                    range.endInclusive
-            }
-            .first
+            }.first
     }
 
     val testInput = readTest(year, day)
