@@ -9,29 +9,28 @@ fun main() {
     val year = "2025"
     val day = "02"
 
-    fun allIds(input: List<String>): List<Long> =
-        input[0].split(",").flatMap {
-            val split = it.split("-")
-            (split[0].toLong()..split[1].toLong()).toList()
-        }
+    fun ids(input: List<String>): Sequence<Long> =
+        input.first()
+            .split(',')
+            .asSequence()
+            .flatMap { range ->
+                val (start, end) = range.split('-').map(String::toLong)
+                (start..end).asSequence()
+            }
 
-    fun isRepeatingNTimes(s: String, n: Int): Boolean =
-        s.length % n == 0 && s == s.take(s.length / n).repeat(n)
+    fun String.isRepeatingNTimes(n: Int): Boolean =
+        length % n == 0 && this == take(length / n).repeat(n)
 
     fun part1(input: List<String>): Long =
-        allIds(input)
-            .filter {
-                val s = it.toString()
-                // if the length is even, and first half == second half
-                isRepeatingNTimes(s, 2)
-            }
+        ids(input)
+            .filter { it.toString().isRepeatingNTimes(2) }
             .sum()
 
     fun part2(input: List<String>): Long =
-        allIds(input)
-            .filter {
-                val s = it.toString()
-                (2..s.length).any { n -> isRepeatingNTimes(s, n) }
+        ids(input)
+            .filter { id ->
+                val s = id.toString()
+                (2..s.length).any(s::isRepeatingNTimes)
             }
             .sum()
 
