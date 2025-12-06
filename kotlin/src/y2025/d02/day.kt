@@ -38,11 +38,9 @@ fun main() {
     val testInput = readTest(year, day)
     val input = readInput(year, day)
 
-    val part1Test = part1(testInput)
-    checkTest(1227775554, part1Test)
+    checkTest(1227775554, part1(testInput))
     part1(input).println()
 
-    val part2Test = part2(testInput)
-    checkTest(4174379265, part2Test)
+    checkTest(4174379265, part2(testInput))
     part2(input).println()
 }
