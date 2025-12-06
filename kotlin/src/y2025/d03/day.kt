@@ -10,16 +10,16 @@ fun main() {
     val day = "03"
 
     fun findJoltage(input: List<String>, numberOfBanks: Int): Long =
-        input.sumOf {
-            val digits = it.toCharArray().toList().map { d -> d.digitToInt() }
-            var joltage = ""
-            var index = 0
-            for (i in numberOfBanks downTo 1) {
-                val maxIndex = (index..digits.size - i).maxBy { i -> digits[i] }
-                joltage += digits[maxIndex]
-                index = maxIndex + 1
+        input.sumOf { line ->
+            val digits = line.map(Char::digitToInt)
+            var from = 0
+            var value = 0L
+            for (remaining in numberOfBanks downTo 1) {
+                val maxIndex = (from..digits.size - remaining).maxByOrNull { idx -> digits[idx] }!!
+                value = value * 10 + digits[maxIndex]
+                from = maxIndex + 1
             }
-            joltage.toLong()
+            value
         }
 
     fun part1(input: List<String>): Long = findJoltage(input, 2)
