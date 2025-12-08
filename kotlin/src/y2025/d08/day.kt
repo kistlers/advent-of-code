@@ -4,7 +4,6 @@ import checkTest
 import println
 import readInput
 import readTest
-import kotlin.math.pow
 import kotlin.math.sqrt
 
 typealias Vertex = Triple<Long, Long, Long>
@@ -19,9 +18,10 @@ fun main() {
         val (x1, y1, z1) = this
         val (x2, y2, z2) = other
 
-        return sqrt(
-            (x2.toDouble() - x1).pow(2) + (y2.toDouble() - y1).pow(2) + (z2.toDouble() - z1).pow(2)
-        )
+        val dx = (x2 - x1).toDouble()
+        val dy = (y2 - y1).toDouble()
+        val dz = (z2 - z1).toDouble()
+        return sqrt(dx * dx + dy * dy + dz * dz)
     }
 
     fun List<String>.parseInput(): Pair<List<Vertex>, List<Edge>> {
@@ -33,7 +33,7 @@ fun main() {
             vertices
                 .flatMapIndexed { i1, v1 ->
                     vertices.drop(i1 + 1).mapIndexed { i2, v2 ->
-                        Edge(i1, i1 + 1 + i2) to v1.distance(v2)
+                        (i1 to (i1 + 1 + i2)) to v1.distance(v2)
                     }
                 }
                 .sortedBy { it.second }
@@ -50,20 +50,23 @@ fun main() {
         var part1: Long = 0
 
         edges.forEachIndexed { edgeIndex, (i1, i2) ->
-            val r1 = representative[i1]!!
-            val r2 = representative[i2]!!
-            if (r1 < r2) {
-                for (addedVertex in connectedComponents[r2]!!) {
-                    representative[addedVertex] = r1
-                    connectedComponents[r1]!!.add(addedVertex)
+            val r1 = representative.getValue(i1)
+            val r2 = representative.getValue(i2)
+            when {
+                r1 < r2 -> {
+                    for (v in connectedComponents.getValue(r2)) {
+                        representative[v] = r1
+                        connectedComponents.getValue(r1).add(v)
+                    }
+                    connectedComponents.remove(r2)
                 }
-                connectedComponents.remove(r2)
-            } else if (r1 > r2) {
-                for (addedVertex in connectedComponents[r1]!!) {
-                    representative[addedVertex] = r2
-                    connectedComponents[r2]!!.add(addedVertex)
+                r1 > r2 -> {
+                    for (v in connectedComponents.getValue(r1)) {
+                        representative[v] = r2
+                        connectedComponents.getValue(r2).add(v)
+                    }
+                    connectedComponents.remove(r1)
                 }
-                connectedComponents.remove(r1)
             }
 
             if (connectedComponents.size == 1) {
@@ -81,7 +84,7 @@ fun main() {
                         .sortedByDescending { it.size }
                         .take(3)
                         .map { it.size.toLong() }
-                        .reduce { acc, size -> acc * size }
+                        .reduce(Long::times)
             }
         }
 
