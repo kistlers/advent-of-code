@@ -13,46 +13,49 @@ fun main() {
 
     val geometryFactory = GeometryFactory()
 
-    fun List<String>.parsePoints(): List<Pair<Double, Double>> =
-        this.map { it.split(",").let { (x, y) -> x.toDouble() to y.toDouble() } }
+    data class Point(val x: Double, val y: Double)
+
+    fun List<String>.parsePoints(): List<Point> =
+        map { it.split(",").let { (x, y) -> Point(x.toDouble(), y.toDouble()) } }
+
+    fun List<Point>.toPolygon(factory: GeometryFactory) =
+        factory.createPolygon((this.map { Coordinate(it.x, it.y) } + Coordinate(first().x, first().y)).toTypedArray())
+
+    fun GeometryFactory.rectangle(p1: Point, p2: Point) =
+        createPolygon(
+            createLinearRing(
+                arrayOf(
+                    Coordinate(p1.x, p1.y),
+                    Coordinate(p2.x, p1.y),
+                    Coordinate(p2.x, p2.y),
+                    Coordinate(p1.x, p2.y),
+                    Coordinate(p1.x, p1.y)
+                )
+            )
+        )
 
     fun solve(input: List<String>): Pair<Long, Long> {
         val points = input.parsePoints()
 
-        val ring = points.map { Coordinate(it.first, it.second) }.toMutableList()
-        ring.add(ring.first())
-        val polygon = geometryFactory.createPolygon(ring.toTypedArray())
+        val polygon = points.toPolygon(geometryFactory)
 
-        val rectangles =
-            points.flatMapIndexed { i, p1 ->
-                points.drop(i + 1).map { p2 ->
-                    val (x1, y1) = p1
-                    val (x2, y2) = p2
-                    val rectangle =
-                        geometryFactory.createPolygon(
-                            geometryFactory.createLinearRing(
-                                arrayOf(
-                                    Coordinate(x1, y1),
-                                    Coordinate(x2, y1),
-                                    Coordinate(x2, y2),
-                                    Coordinate(x1, y2),
-                                    Coordinate(x1, y1),
-                                )
-                            )
-                        )
+        var maxAny = Double.NEGATIVE_INFINITY
+        var maxInside = Double.NEGATIVE_INFINITY
 
-                    // our rectangle is only aligned in the center between the grid points. We need
-                    // to add a 0.5 wide boundary to the outside, which is
-                    // 2*height*0.5 + 2*width*0.5 + 4*1/4 grid cells == boundary/2+1
-                    val area = rectangle.area + rectangle.boundary.length / 2 + 1
-                    val isInPolygon = polygon.contains(rectangle)
-                    area to isInPolygon
-                }
+        points.forEachIndexed { i, p1 ->
+            for (p2 in points.drop(i + 1)) {
+                val rectangle = geometryFactory.rectangle(p1, p2)
+
+                // our rectangle is only aligned in the center between the grid points. We need
+                // to add a 0.5 wide boundary to the outside, which is
+                // 2*height*0.5 + 2*width*0.5 + 4*1/4 grid cells == boundary/2+1
+                val area = rectangle.area + rectangle.boundary.length / 2 + 1
+                if (area > maxAny) maxAny = area
+                if (polygon.contains(rectangle) && area > maxInside) maxInside = area
             }
+        }
 
-        val part1 = rectangles.maxOf { it.first }
-        val part2 = rectangles.filter { it.second }.maxOf { it.first }
-        return part1.toLong() to part2.toLong()
+        return maxAny.toLong() to maxInside.toLong()
     }
 
     val testInput = readTest(year, day)
