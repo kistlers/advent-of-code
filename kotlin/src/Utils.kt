@@ -11,6 +11,10 @@ fun readInput(year: String, day: String) =
 fun readTest(year: String, day: String) =
     Path("src/y$year/d$day/test.txt").readText().trim().lines()
 
+/** Reads lines from the given test2 txt file. */
+fun readTest2(year: String, day: String) =
+    Path("src/y$year/d$day/test2.txt").readText().trim().lines()
+
 fun checkTest(expected: Long, actual: Long) =
     check(expected == actual) { "Expected: $expected, Actual: $actual" }
 
